@@ -52,6 +52,8 @@ PokerHand.prototype.compareWith = function(hand) {
     }
 };
 
+/* DECLARE CONSTANTS */
+
 const validNumbers = ['2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A'];
 
 const pokerRanks = [
@@ -67,27 +69,33 @@ const pokerRanks = [
     'High card',
 ]
 
-// const validSuits = ['H', 'C', 'S', 'D'];
+// Example hands for testing, uncomment to use in browser console
+// const sampleHandRoyal = new PokerHand('AS KS TS QS JS'); // Royal flush
+// const sampleHandStrFlush = new PokerHand('3S 5S 7S 6S 4S'); // Straight flush
+// const sampleHandFour = new PokerHand('AS AD AC AH JS'); // 4 of a kind
+// const sampleHandFull = new PokerHand('QS 2D 2C QS QH'); // Full house
+// const sampleHandFlush = new PokerHand('2S 4S 6S QS JS'); // Flush
+// const sampleHandStr = new PokerHand('4S 5C 7H 8S 6D'); // Straight
+// const sampleHandThree = new PokerHand('4H 4C 4S 2H JS'); // 3 of a kind
+// const sampleHand2Pair = new PokerHand('7D 7C 3S TD TH'); // Two Pairs
+// const sampleHand1Pair = new PokerHand('AS AH 5D 2S 3C'); // Pair
+// const sampleHandHighCard = new PokerHand('AS 8D TS 3C 5H'); // High card
 
-// Example hands for testing
-const sampleHandRoyal = new PokerHand('AS KS TS QS JS'); // Royal flush
-const sampleHandStrFlush = new PokerHand('3S 5S 7S 6S 4S'); // Straight flush
-const sampleHandFour = new PokerHand('AS AD AC AH JS'); // 4 of a kind
-const sampleHandFull = new PokerHand('QS 2D 2C QS QH'); // Full house
-const sampleHandFlush = new PokerHand('2S 4S 6S QS JS'); // Flush
-const sampleHandStr = new PokerHand('4S 5C 7H 8S 6D'); // Straight
-const sampleHandThree = new PokerHand('4H 4C 4S 2H JS'); // 3 of a kind
-const sampleHand2Pair = new PokerHand('7D 7C 3S TD TH'); // Two Pairs
-const sampleHand1Pair = new PokerHand('AS AH 5D 2S 3C'); // Pair
-const sampleHandHighCard = new PokerHand('AS 8D TS 3C 5H'); // High card
 
+
+/* HELPER FUNCTIONS */
+
+// Get card numbers contained in hand
 function getHandDenominations(cards) {
     return cards.map(ele => ele[0]).sort();
 }
 
+// Get suits contained in hand
 function getHandSuits(cards) {
     return cards.map(ele => ele[1]).sort();
 }
+
+/* FUNCTIONS TO POPULATE HAND OBJECT */
 
 // Create object showing breakdown of cards denominations in hand
 function getQuantityOfNumbers(hand) {
@@ -147,6 +155,7 @@ function getHighCard(hand) {
     return validNumbers[highIndex];
 }
 
+// Get the result of the hand
 function getResult(hand) {
 
     const denoms = getHandDenominations(hand.hand.split(' '));
@@ -215,14 +224,3 @@ function getResult(hand) {
     // High card           Highest card if no other combination
     return pokerRanks[9];
 }
-
-// console.log(getResult(sampleHandRoyal));
-// console.log(getResult(sampleHandStrFlush));
-// console.log(getResult(sampleHandFour));
-// console.log(getResult(sampleHandFull));
-// console.log(getResult(sampleHandFlush));
-// console.log(getResult(sampleHandStr));
-// console.log(getResult(sampleHandThree));
-// console.log(getResult(sampleHand2Pair));
-// console.log(getResult(sampleHand1Pair));
-// console.log(getResult(sampleHandHighCard));
