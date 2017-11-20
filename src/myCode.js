@@ -2,33 +2,84 @@ var Result = { "win": 1, "loss": 2, "tie": 3 };
 
 var PokerHand = function(hand) {
     this.hand = hand;
-    this.cardSplit = {
-        'cardNums': getHandDenominations(hand.split(' ')),
-        'cardSuits': getHandSuits(hand.split(' '))
+    this.breakdown = {
+        'numberBreakdown': getQuantityOfNumbers(hand),
+        'consecutiveNumbers': checkConsecutiveNumbers(hand),
+        'sameSuits': checkSameSuits(hand),
+        'highCardIndex': validNumbers.indexOf(getHighCard(hand))
     };
-    this.breakdown = {};
 };
 
-PokerHand.prototype.compareWith = function(/*hand*/) {
-	return Result.tie;
+PokerHand.prototype.compareWith = function(hand) {
+    
+    // No parameter given in function
+    if(hand === undefined) {
+        throw new Error('Please compare to another hand');
+    }
+
+    const player1 = new PokerHand(this.hand);
+    const player2 = hand;
+
+    // Get index of result in pokerRanks (lower score better)
+    const p1Result = pokerRanks.indexOf(getResult(player1));
+    const p2Result = pokerRanks.indexOf(getResult(player2));
+
+    // If both players only have high card, compare cards
+    if(p1Result === 9 && p2Result === 9) {
+        if(player1.breakdown.highCardIndex > player2.breakdown.highCardIndex) {
+            console.log('Winner! High card');
+            return Result.win;
+        } else if(player1.breakdown.highCardIndex < player2.breakdown.highCardIndex) {
+            console.log('Loser :o(');
+            return Result.loss;
+        } else {
+            console.log('Bore draw');
+            return Result.tie
+        }
+
+    // Else compare pokerRanks index (lower score wins)
+    } else if(p1Result < p2Result) {
+        console.log('Winner!');
+        return Result.win;
+    } else if (p1Result > p2Result) {
+        console.log('Loser :o(');
+        return Result.loss;
+    } else if (p1Result === p2Result) {
+        console.log('Bore draw');
+        return Result.tie
+    } else {
+        throw new Error('Error: cannot compare hands');
+    }
 };
 
 const validNumbers = ['2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A'];
 
+const pokerRanks = [
+    'Royal flush',
+    'Straight flush',
+    '4 of a kind',
+    'Full house',
+    'Flush',
+    'Straight',
+    '3 of a kind',
+    'Two pairs',
+    'Pair',
+    'High card',
+]
+
 // const validSuits = ['H', 'C', 'S', 'D'];
 
-// const sampleHand = new PokerHand('AS KS TS QS JS'); // Royal flush
-// const sampleHand = new PokerHand('3S 5S 7S 6S 4S'); // Straight flush
-// const sampleHand = new PokerHand('AS AD AC AH JS'); // 4 of a kind
-const sampleHand = new PokerHand('2S 2D 2C QS QH'); // Full house
-// const sampleHand = new PokerHand('2S 4S 6S QS JS'); // Flush
-// const sampleHand = new PokerHand('4S 5C 7H 8S 6D'); // Straight
-// const sampleHand = new PokerHand('4H 4C 4S 2H JS'); // 3 of a kind
-// const sampleHand = new PokerHand('7D 7C 3S TD TH'); // Two Pairs
-// const sampleHand = new PokerHand('AS AH 5D 2S 3C'); // Pair
-// const sampleHand = new PokerHand('AS 8D TS 3C 5H'); // High card
-
-getHandBreakdown(sampleHand);
+// Example hands for testing
+const sampleHandRoyal = new PokerHand('AS KS TS QS JS'); // Royal flush
+const sampleHandStrFlush = new PokerHand('3S 5S 7S 6S 4S'); // Straight flush
+const sampleHandFour = new PokerHand('AS AD AC AH JS'); // 4 of a kind
+const sampleHandFull = new PokerHand('QS 2D 2C QS QH'); // Full house
+const sampleHandFlush = new PokerHand('2S 4S 6S QS JS'); // Flush
+const sampleHandStr = new PokerHand('4S 5C 7H 8S 6D'); // Straight
+const sampleHandThree = new PokerHand('4H 4C 4S 2H JS'); // 3 of a kind
+const sampleHand2Pair = new PokerHand('7D 7C 3S TD TH'); // Two Pairs
+const sampleHand1Pair = new PokerHand('AS AH 5D 2S 3C'); // Pair
+const sampleHandHighCard = new PokerHand('AS 8D TS 3C 5H'); // High card
 
 function getHandDenominations(cards) {
     return cards.map(ele => ele[0]).sort();
@@ -38,91 +89,111 @@ function getHandSuits(cards) {
     return cards.map(ele => ele[1]).sort();
 }
 
-function getHandBreakdown(hand) {
-    let handObj = hand.breakdown;
-
-    // Get object to show numbers of each denomination
-    hand.cardSplit.cardNums.map(ele => {
+// Create object showing breakdown of cards denominations in hand
+function getQuantityOfNumbers(hand) {
+    let cardDenoms = {};
+    
+    getHandDenominations(hand.split(' ')).map(ele => {
         if(validNumbers.includes(ele)) {
-            typeof handObj[ele] == 'undefined' ? handObj[ele] = 1 : handObj[ele]++;
+            typeof cardDenoms[ele] === 'undefined' ? cardDenoms[ele] = 1 : cardDenoms[ele]++;    
         }
-    });
+    })
+    return cardDenoms;
+}
 
-    // Check if hand has same suits
-    const suit = hand.cardSplit.cardSuits.shift();
-    let count = 0;
-
-    hand.cardSplit.cardSuits.map(ele => {
-        ele === suit ? count++ : null;
-    });
-
-    count === 4 ? handObj['suits'] = 'match' : handObj['suits'] = 'unmatched';
-
-    // Check if numbers are consecutive
+// Check to see if card numbers are consecutive
+function checkConsecutiveNumbers(hand) {
     let indexes = [];
-    hand.cardSplit.cardNums.map(ele => {
-        indexes.push(validNumbers.indexOf(ele));
-    });
-    const sortedIndexes = indexes.sort((a, b) => a - b);
+    let consecutiveNumbers = true;
 
-    handObj['numbers'] = 'consecutive';
+    getHandDenominations(hand.split(' ')).map(ele => {
+        indexes.push(validNumbers.indexOf(ele));
+    })
+
+    const sortedIndexes = indexes.sort((a, b) => a - b);
 
     for(let i = 1; i < sortedIndexes.length; i++) {
         if(sortedIndexes[i - 1] != sortedIndexes[i] - 1) {
-            handObj['numbers'] = 'jumbled';
+            consecutiveNumbers = false;
         }
     }
+    return consecutiveNumbers;
+}
 
-    return handObj;
+// Check to see if all cards are the same suit
+function checkSameSuits(hand) {
+    const suitsInHand = getHandSuits(hand.split(' '));
+    const suit = suitsInHand.shift();    
+    let count = 0;
+
+    suitsInHand.map(ele => {
+        if(ele === suit) {
+            count++;
+        }
+    })
+
+    return count === 4 ? true : false;
+}
+
+function getHighCard(hand) {
+    let highIndex = 0;
+
+    getHandDenominations(hand.split(' ')).map(ele => {
+        if(validNumbers.indexOf(ele) > highIndex) {
+            highIndex = validNumbers.indexOf(ele);
+        }
+    })
+
+    return validNumbers[highIndex];
 }
 
 function getResult(hand) {
 
-    const denoms = hand.cardSplit.cardNums;
+    const denoms = getHandDenominations(hand.hand.split(' '));
 
     // Royal flush         A => 10 same suit
     if(denoms.includes('A')
-        && hand.breakdown.numbers === 'consecutive'
-        && hand.breakdown.suits === 'match') {
-            return 'Royal Flush';
+        && hand.breakdown.consecutiveNumbers
+        && hand.breakdown.sameSuits) {
+            return pokerRanks[0];
     }
 
     // Straight flush      5 consecutive numbers same suit
-    if(hand.breakdown.numbers === 'consecutive'
-        && hand.breakdown.suits === 'match') {
-            return 'Straight Flush';
+    if(hand.breakdown.consecutiveNumbers
+        && hand.breakdown.sameSuits) {
+            return pokerRanks[1];
     }
     
     // Four of a kind      Four cards the same
     let duplicates = [];
 
-    for (const prop in hand.breakdown) {
-        if(hand.breakdown[prop] === 4) {
-            return '4 of a kind';
+    for (const prop in hand.breakdown.numberBreakdown) {
+        if(hand.breakdown.numberBreakdown[prop] === 4) {
+            return pokerRanks[2];
         } else {
-            duplicates.push(hand.breakdown[prop]);   
+            duplicates.push(hand.breakdown.numberBreakdown[prop]);   
         }        
     }
 
     // Full house          3 cards same denomination + a pair
-    if(duplicates[0] === 3 && duplicates[1] === 2) {
-        return 'Full House';
+    if((duplicates[0] === 3 && duplicates[1] === 2) || (duplicates[1] === 3 && duplicates[0] === 2)) {
+        return pokerRanks[3];
     }
 
     // Flush               5 cards same suit  
-    if(hand.breakdown.suits === 'match') {
-        return 'Flush';
+    if(hand.breakdown.sameSuits) {
+        return pokerRanks[4];
     }
     
     // Straight            Any 5 cards in sequence
-    if(hand.breakdown.numbers === 'consecutive') {
-        return 'Straight';
+    if(hand.breakdown.consecutiveNumbers) {
+        return pokerRanks[5];
     }
 
     // Three of a kind     3 cards same denomination
-    for (const prop in hand.breakdown) {
-        if(hand.breakdown[prop] === 3) {
-            return '3 of a kind';
+    for (const prop in hand.breakdown.numberBreakdown) {
+        if(hand.breakdown.numberBreakdown[prop] === 3) {
+            return pokerRanks[6];
         }      
     }
 
@@ -136,13 +207,22 @@ function getResult(hand) {
     });
     
     if(pairs.length === 2) {
-        return "Two pairs";
+        return pokerRanks[7];
     } else if(pairs.length === 1) {
-        return 'One pair';
+        return pokerRanks[8];
     }
 
     // High card           Highest card if no other combination
-    return 'High card';
+    return pokerRanks[9];
 }
 
-console.log(getResult(sampleHand));
+// console.log(getResult(sampleHandRoyal));
+// console.log(getResult(sampleHandStrFlush));
+// console.log(getResult(sampleHandFour));
+// console.log(getResult(sampleHandFull));
+// console.log(getResult(sampleHandFlush));
+// console.log(getResult(sampleHandStr));
+// console.log(getResult(sampleHandThree));
+// console.log(getResult(sampleHand2Pair));
+// console.log(getResult(sampleHand1Pair));
+// console.log(getResult(sampleHandHighCard));
