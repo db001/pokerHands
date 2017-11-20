@@ -1,0 +1,14 @@
+
+{
+    "env": {
+        "browser": true
+    },
+    "globals": {
+
+    },
+    "rules": {
+
+    },
+
+    "extends": "eslint:recommended"
+}

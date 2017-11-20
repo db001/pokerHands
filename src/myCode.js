@@ -20,13 +20,13 @@ const validSuits = ['H', 'C', 'S', 'D'];
 // const sampleHand = new PokerHand('AS KS TS QS JS'); // Royal flush
 // const sampleHand = new PokerHand('3S 5S 7S 6S 4S'); // Straight flush
 // const sampleHand = new PokerHand('AS AD AC AH JS'); // 4 of a kind
-// const sampleHand = new PokerHand('2S 2D 2C QS QH'); // Full house
+const sampleHand = new PokerHand('2S 2D 2C QS QH'); // Full house
 // const sampleHand = new PokerHand('2S 4S 6S QS JS'); // Flush
 // const sampleHand = new PokerHand('4S 5C 7H 8S 6D'); // Straight
 // const sampleHand = new PokerHand('4H 4C 4S 2H JS'); // 3 of a kind
 // const sampleHand = new PokerHand('7D 7C 3S TD TH'); // Two Pairs
 // const sampleHand = new PokerHand('AS AH 5D 2S 3C'); // Pair
-const sampleHand = new PokerHand('AS 8D TS 3C 5H'); // High card
+// const sampleHand = new PokerHand('AS 8D TS 3C 5H'); // High card
 
 getHandBreakdown(sampleHand);
 
@@ -143,7 +143,5 @@ function getResult(hand) {
     }
 
     // High card           Highest card if no other combination
-    return 'High card'
-
-
+    return 'High card';
 }

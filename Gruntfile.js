@@ -4,10 +4,18 @@ module.exports = function(grunt) {
         watch: {
             scripts: {
                 files: ['src/*.js'],
+                tasks: ['eslint'],
                 options: {
                     spawn: false,
                 },
             },
+        },
+
+        eslint: {
+            options: {
+                configFile: 'eslint.json'
+            },
+            target: ['src/myCode.js']
         },
 
         browserSync: {
@@ -38,6 +46,7 @@ module.exports = function(grunt) {
     // Loading and registering tasks goes here
     grunt.loadNpmTasks('grunt-browser-sync');
     grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.registerTask('default', ['browserSync', 'watch']);
+    grunt.loadNpmTasks('grunt-eslint');
+    grunt.registerTask('default', ['eslint', 'browserSync', 'watch']);
 
 };
