@@ -1,13 +1,17 @@
 
 {
     "env": {
-        "browser": true
+        "browser": true,
+        "es6": true
     },
     "globals": {
 
     },
     "rules": {
-
+        "no-console": "off"
+    },
+    "parserOptions": {
+        "ecmaVersion": 6
     },
 
     "extends": "eslint:recommended"

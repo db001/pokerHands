@@ -9,13 +9,13 @@ var PokerHand = function(hand) {
     this.breakdown = {};
 };
 
-PokerHand.prototype.compareWith = function(hand) {
+PokerHand.prototype.compareWith = function(/*hand*/) {
 	return Result.tie;
 };
 
 const validNumbers = ['2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A'];
 
-const validSuits = ['H', 'C', 'S', 'D'];
+// const validSuits = ['H', 'C', 'S', 'D'];
 
 // const sampleHand = new PokerHand('AS KS TS QS JS'); // Royal flush
 // const sampleHand = new PokerHand('3S 5S 7S 6S 4S'); // Straight flush
@@ -79,7 +79,6 @@ function getHandBreakdown(hand) {
 function getResult(hand) {
 
     const denoms = hand.cardSplit.cardNums;
-    const suits = hand.cardSplit.cardSuits;
 
     // Royal flush         A => 10 same suit
     if(denoms.includes('A')
@@ -145,3 +144,5 @@ function getResult(hand) {
     // High card           Highest card if no other combination
     return 'High card';
 }
+
+console.log(getResult(sampleHand));
