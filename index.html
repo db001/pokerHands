@@ -5,12 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Example</title>
+
+    <link rel="stylesheet" href="src/style.css">
 </head>
 <body>
     
-    <input type="text">
+    <div class="container">
+        <div class="inputContainer">
+            <div class="playerInput">
+                <label for="playerOneInput">Player</label>
+                <input type="text" id="player1">
+                <div class="result" id="playerResult"></div>
+            </div>
+            <div class="playerInput">
+                <label for="opponentInput">Opponent</label>    
+                <input type="text" id="player2">
+                <button type="submit" id="submit-btn">Submit</button>
+                <div class="result" id="oppoResult"></div>
+            </div>            
+        </div>
+        <div id="message">Please input your poker hands</div> 
+    </div>  
         
-    <script src="src/myCode.js"></script>
+      
+        
+   
+    <script src="src/poker.js"></script>
             
 </body>
 </html>

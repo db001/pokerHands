@@ -9,13 +9,16 @@ module.exports = function(grunt) {
                     spawn: false,
                 },
             },
+            css: {
+                files: 'src/*.css',
+            }
         },
 
         eslint: {
             options: {
                 configFile: 'eslint.json'
             },
-            target: ['src/myCode.js']
+            target: ['src/*.js']
         },
 
         browserSync: {
@@ -23,7 +26,8 @@ module.exports = function(grunt) {
                 bsFiles: {
                     src: [
                         "index.html",
-                        "src/*.js"
+                        "src/*.js",
+                        "src/*.css"   
                     ]
                 },
             },

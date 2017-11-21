@@ -27,25 +27,25 @@ PokerHand.prototype.compareWith = function(hand) {
     // If both players only have high card, compare cards
     if(p1Result === 9 && p2Result === 9) {
         if(player1.breakdown.highCardIndex > player2.breakdown.highCardIndex) {
-            console.log('Winner! High card');
+            message = 'Winner! High card';
             return Result.win;
         } else if(player1.breakdown.highCardIndex < player2.breakdown.highCardIndex) {
-            console.log('Loser :o(');
+            message = 'Loser :o(';
             return Result.loss;
         } else {
-            console.log('Bore draw');
+            message = 'Bore draw';
             return Result.tie
         }
 
     // Else compare pokerRanks index (lower score wins)
     } else if(p1Result < p2Result) {
-        console.log('Winner!');
+        message = 'Winner!';
         return Result.win;
     } else if (p1Result > p2Result) {
-        console.log('Loser :o(');
+        message = 'Loser :o(';
         return Result.loss;
     } else if (p1Result === p2Result) {
-        console.log('Bore draw');
+        message = 'Bore draw';
         return Result.tie
     } else {
         throw new Error('Error: cannot compare hands');
@@ -225,3 +225,28 @@ function getResult(hand) {
     // High card           Highest card if no other combination
     return pokerRanks[9];
 }
+
+/* UI LOGIC */
+
+let message;
+const submitBtn = document.getElementById('submit-btn');
+
+
+submitBtn.addEventListener('click', function() {
+    
+    let messageText = document.getElementById('message');
+    let playerOneResult = document.getElementById('playerResult');
+    let playerTwoResult = document.getElementById('oppoResult');   
+    let playerOneHand, playerTwoHand;
+
+    playerOneHand = new PokerHand(document.getElementById('player1').value);
+    playerTwoHand = new PokerHand(document.getElementById('player2').value);
+
+    playerOneResult.innerHTML = getResult(playerOneHand);
+    playerTwoResult.innerHTML = getResult(playerTwoHand);
+
+    playerOneHand.compareWith(playerTwoHand);
+
+    messageText.innerHTML = message;
+
+})
