@@ -95,6 +95,7 @@ function getHandSuits(cards) {
     return cards.map(ele => ele[1]).sort();
 }
 
+
 /* FUNCTIONS TO POPULATE HAND OBJECT */
 
 // Create object showing breakdown of cards denominations in hand
