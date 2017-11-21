@@ -25,7 +25,7 @@ module.exports = function(grunt) {
             default_options: {
                 bsFiles: {
                     src: [
-                        "index.html",
+                        "src/index.html",
                         "src/*.js",
                         "src/*.css"   
                     ]
@@ -34,7 +34,7 @@ module.exports = function(grunt) {
             options: {
                 watchTask: true,
                 server: {
-                    baseDir: './'
+                    baseDir: './src'
                 },
             },
         },
