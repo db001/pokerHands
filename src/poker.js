@@ -144,6 +144,7 @@ function checkSameSuits(hand) {
     return count === 4 ? true : false;
 }
 
+// Get value of high card
 function getHighCard(hand) {
     let highIndex = 0;
 
